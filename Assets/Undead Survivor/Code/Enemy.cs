@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float speed;
-    public Rigidbody2D target;
+    public Rigidbody2D target;  //? 왜 GameObject로 안하고 Rigidbody2D로 선언했을까?
 
     bool isLive = true;
 
@@ -35,5 +35,11 @@ public class Enemy : MonoBehaviour
     void LateUpdate()
     {
         spriter.flipX = target.position.x < rigid.position.x;
+    }
+
+    // 유니티 이벤트
+    void OnEnable()
+    {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
     }
 }
