@@ -5,16 +5,21 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float speed;
+    public float health;    // 현재 체력
+    public float maxHealth; // 최대 체력
+    public RuntimeAnimatorController[] animCon;
     public Rigidbody2D target;  //? 왜 GameObject로 안하고 Rigidbody2D로 선언했을까?
 
-    bool isLive = true;
+    bool isLive;
 
     Rigidbody2D rigid;
+    Animator anim;
     SpriteRenderer spriter;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         spriter = GetComponent<SpriteRenderer>();
     }
     
@@ -41,5 +46,17 @@ public class Enemy : MonoBehaviour
     void OnEnable()
     {
         target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        // 생존여부와 체력 초기화
+        isLive = true;
+        //health = maxHealth;
+    }
+
+    // 초기 속성을 적용하는 함수 추가
+    public void Init(SpawnData data)
+    {
+        anim.runtimeAnimatorController = animCon[data.spriteType];
+        speed = data.speed;
+        maxHealth = data.health;
+        health = data.health;
     }
 }
