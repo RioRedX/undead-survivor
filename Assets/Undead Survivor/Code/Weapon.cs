@@ -10,7 +10,15 @@ public class Weapon : MonoBehaviour
     public int prefabId;   
     public float damage;
     public int count;      // 무기 갯수?
-    public float speed;    // 회전 속도?
+    public float speed;    // 회전 속도 or 연사 속도(값이 작으면 많이 발사)
+
+    float timer;
+    Player player;
+
+    void Awake()
+    {
+        player = GetComponentInParent<Player>();
+    }
 
     void Start()
     {
@@ -26,13 +34,18 @@ public class Weapon : MonoBehaviour
                 transform.Rotate(Vector3.back * speed * Time.deltaTime);
                 break;
             default:
+                timer += Time.deltaTime;
+                if (timer > speed) {
+                    timer = 0f;
+                    Fire();
+                }
                 break;
         }
 
         // .. Test Code..
         if (Input.GetButtonDown("Jump"))
         {
-            LevelUp(20, 5);
+            LevelUp(10, 5);
         }
     }
 
@@ -57,6 +70,7 @@ public class Weapon : MonoBehaviour
                 Batch();
                 break;
             default:
+                speed = 0.3f;
                 break;
         }
     }
@@ -86,7 +100,23 @@ public class Weapon : MonoBehaviour
             Vector3 rotVec = Vector3.forward * 360 * i / count;
             bullet.Rotate(rotVec);
             bullet.Translate(bullet.up * 1.5f, Space.World);
-            bullet.GetComponent<Bullet>().Init(damage, -1); // -1 is Infinity Per.
+            bullet.GetComponent<Bullet>().Init(damage, -1, Vector3.zero); // -1 is Infinity Per.
         }
+    }
+
+    void Fire()
+    {
+        //!? Transform 변수도 null체크가 가능하네?
+        if (!player.scanner.nearestTarget)
+            return;
+
+        Vector3 targetPos = player.scanner.nearestTarget.position;
+        Vector3 dir = targetPos - transform.position;
+        dir = dir.normalized;
+
+        Transform bullet = GameManager.instance.pool.Get(prefabId).transform;
+        bullet.position = transform.position;
+        bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
+        bullet.GetComponent<Bullet>().Init(damage, count, dir); 
     }
 }
