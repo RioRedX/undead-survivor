@@ -17,12 +17,7 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
-        player = GetComponentInParent<Player>();
-    }
-
-    void Start()
-    {
-        Init();
+        player = GameManager.instance.player;
     }
 
     void Update()
@@ -58,10 +53,30 @@ public class Weapon : MonoBehaviour
         // 근접무기의 경우 : 속성 변경화 '동시에' 배치도 필요하니 함수 호출
         if (id == 0)
             Batch();
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        // Basic Set
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        // Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        //!? ?
+        for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++) {
+            if (data.projectile == GameManager.instance.pool.prefabs[i]) {
+                prefabId = i;
+                break;
+            }
+        }
+
         // 무기 ID에 따라 로직을 분리할 Switch문 작성
         switch (id)
         {
@@ -73,6 +88,8 @@ public class Weapon : MonoBehaviour
                 speed = 0.3f;
                 break;
         }
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
     void Batch()

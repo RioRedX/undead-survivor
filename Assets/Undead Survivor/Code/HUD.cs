@@ -16,6 +16,7 @@ public class HUD : MonoBehaviour
     {
         myText = GetComponent<Text>();
         mySlider = GetComponent<Slider>();
+
     }
 
     // 데이터가 변할 때마다 계속 갱신 필요
