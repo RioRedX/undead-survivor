@@ -89,6 +89,11 @@ public class Weapon : MonoBehaviour
                 break;
         }
 
+        // Hand Set - ItemData 참조 : 근거리 0, 원거리 1
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+
         player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
