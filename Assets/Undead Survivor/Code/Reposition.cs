@@ -5,7 +5,7 @@ using UnityEngine;
 public class Reposition : MonoBehaviour
 {
     Collider2D coll;
-
+    
     void Awake()
     {
         coll = GetComponent<Collider2D>();

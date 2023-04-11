@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D target;  //? 왜 GameObject로 안하고 Rigidbody2D로 선언했을까?
 
     bool isLive;
-
+    
     Rigidbody2D rigid;
     Collider2D coll;
     Animator anim;
