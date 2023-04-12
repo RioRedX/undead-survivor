@@ -50,8 +50,8 @@ public class Weapon : MonoBehaviour
     // 다른 스크립트에서 호출 예정
     public void LevelUp(float damage, int count)
     {
-        this.damage = damage;
-        this.count += count;
+        this.damage = damage * Character.Damage;
+        this.count += count;// + Character.Count
 
         // 근접무기의 경우 : 속성 변경화 '동시에' 배치도 필요하니 함수 호출
         if (id == 0)
@@ -69,8 +69,8 @@ public class Weapon : MonoBehaviour
 
         // Property Set
         id = data.itemId;
-        damage = data.baseDamage;
-        count = data.baseCount;
+        damage = data.baseDamage * Character.Damage;
+        count = data.baseCount + Character.Count;
 
         //!? ?
         for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++) {
@@ -84,11 +84,11 @@ public class Weapon : MonoBehaviour
         switch (id)
         {
             case 0:
-                speed = 150f;
+                speed = 150f * Character.WeaponSpeed;
                 Batch();
                 break;
             default:
-                speed = 0.3f;
+                speed = 0.5f * Character.WeaponRate;
                 break;
         }
 
