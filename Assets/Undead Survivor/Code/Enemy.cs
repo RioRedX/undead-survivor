@@ -30,6 +30,9 @@ public class Enemy : MonoBehaviour
     // 물리관련 == rigid 사용
     void FixedUpdate()
     {
+        if (!GameManager.instance.isLive)
+            return;
+
         if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
 
@@ -43,6 +46,9 @@ public class Enemy : MonoBehaviour
     // 후처리
     void LateUpdate()
     {
+        if (!GameManager.instance.isLive)
+            return;
+
         if (!isLive)
             return;
 
