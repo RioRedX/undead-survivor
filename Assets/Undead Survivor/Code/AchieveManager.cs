@@ -83,7 +83,8 @@ public class AchieveManager : MonoBehaviour
     IEnumerator NoticeRoutine()
     {
         uiNotice.SetActive(true);
-        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
+
         //yield return new WaitForSeconds(5); // 부를때마다 new는 자원낭비
         yield return wait;
 

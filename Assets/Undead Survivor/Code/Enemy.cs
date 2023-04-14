@@ -91,6 +91,7 @@ public class Enemy : MonoBehaviour
             anim.SetTrigger("Hit");
 
             StartCoroutine(KnockBack()); // "KnockBack"도 가능
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
         }
         else
         {
@@ -103,6 +104,12 @@ public class Enemy : MonoBehaviour
             anim.SetBool("Dead", true);
             GameManager.instance.kill++;
             GameManager.instance.GetExp();
+
+            // 게임 승리시 사운드 테러 방지
+            if (GameManager.instance.isLive) {
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
+            }
+
         }
     }
 
