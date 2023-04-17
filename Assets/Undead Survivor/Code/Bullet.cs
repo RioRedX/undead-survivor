@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
         this.damage = damage;
         this.per = per;
 
-        if(per > -1) {
+        if(per >= 0) {
             rigid.velocity = dir * 15f;
         }
     }
@@ -29,14 +29,24 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         // 원거리 무기의 관통력 조절
-        if (!collision.CompareTag("Enemy") || per == -1)
+        if (!collision.CompareTag("Enemy") || per == -100)
             return;
 
         per--;
 
-        if (per == -1) {
+        if (per < 0) {
             rigid.velocity = Vector2.zero;  
             gameObject.SetActive(false);
         }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        // 해석 : Area가 아니거나 근접무기일 경우 나가랏!
+        if (!collision.CompareTag("Area") || per == -100)
+            return;
+
+        // 아래 : Area이면서 원거리 무기일 경우
+        gameObject.SetActive(false);
     }
 }

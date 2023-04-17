@@ -20,23 +20,17 @@ public class Reposition : MonoBehaviour
         Vector3 playerPos = GameManager.instance.player.transform.position;
         Vector3 myPos = transform.position; // myPos -> mapPos 하지만, enemy에도 쓰인다면..
 
-        float dirX = playerPos.x - myPos.x;
-        float dirY = playerPos.y - myPos.y;
-
-        float diffX = Mathf.Abs(dirX);
-        float diffY = Mathf.Abs(dirY);
-
-        dirX = dirX < 0 ? -1 : 1;
-        dirY = dirY < 0 ? -1 : 1;
-
-        // 이동키에 의향 방향 설정
-        Vector3 playerDir = GameManager.instance.player.inputVec;
-        //float dirX = playerDir.x < 0 ? -1 : 1;
-        //float dirY = playerDir.y < 0 ? -1 : 1;
-
         switch (transform.tag)
         {
             case "Ground":
+                float diffX = playerPos.x - myPos.x;
+                float diffY = playerPos.y - myPos.y;
+                //방향 구함
+                float dirX = diffX < 0 ? -1 : 1;
+                float dirY = diffY < 0 ? -1 : 1;
+                diffX = Mathf.Abs(diffX);
+                diffY = Mathf.Abs(diffY);
+
                 if (diffX > diffY)
                 {
                     transform.Translate(Vector3.right * dirX * 40);
@@ -50,7 +44,9 @@ public class Reposition : MonoBehaviour
                 // 추후 몬스터가 죽으면 콜라이더 비활성화
                 if (coll.enabled)
                 {
-                    transform.Translate(playerDir*20 + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f),0));
+                    Vector3 dist = playerPos - myPos;
+                    Vector3 ran = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+                    transform.Translate(ran + dist * 2);
                 }
                 break;
         }
